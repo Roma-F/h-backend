@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=685f0e1b-5143-4070-abd3-ce3b755e2548&lang=ru_RU" type="text/javascript">
+    </script>
+</head>
+<body>
+
+    <div id="map" style="width: 600px; height: 400px"></div>
+
+    
+    <script type="text/javascript">
+        ymaps.ready(init);
+        function init(){
+            var myMap = new ymaps.Map("map", {
+                center: [55.76, 37.64],
+                zoom: 7
+            });
+
+            doWork();
+            // debug("Ярославская область, Рыбинский район, Покровское с/пос, Красная Горка поселок, ул. Центральная, 25");
+        }
+
+        function debug(addres) {
+            ymaps.geocode(addres, { results: 1})
+                .then((res) => {
+                    var firstGeoObject = res.geoObjects.get(0);
+                    if (firstGeoObject) {
+                        var coords = firstGeoObject.geometry.getCoordinates();
+                        var geoProps = firstGeoObject.properties.getAll().metaDataProperty;
+                        console.log(geoProps);
+                        var body = makeBody(1, geoProps, coords, addres);
+                        console.log(body);
+                    } 
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        }
+
+        function doWork() {
+            console.log("doWork");
+            fetch('http://localhost:8080')
+                .then(response => response.json())
+                .then(data => {
+                    handleEnries(data);
+                })
+                .catch(err => {
+                    console.log(err);
+                    doWork();
+                })
+        };
+
+        function handleEnries(entries) {
+            var total = entries.length;
+            var processed = [];
+
+            var checkProcessed = (status) => {
+                processed.push(status);
+                console.log(`Processed ${processed.length} of ${total}`);
+
+                if (processed.length == total) {
+                    console.log(`all entries processed`);
+                    if (processed.every((status) => status == false)) {
+                        console.log('STOP PROCESSING');
+                        return
+                    }
+                    var successProcessed = processed.filter(s => s === true).length;
+                    console.log(`${successProcessed} entries processed successfully`);
+                    doWork();
+                    return
+                }
+            }
+
+            for (let i = 0; i < entries.length; i++) {
+                const entry = entries[i];
+
+                setTimeout(() => {
+                    ymaps.geocode(entry.address, { results: 1})
+                        .then((res) => {
+                            var firstGeoObject = res.geoObjects.get(0);
+                            if (firstGeoObject) {
+                                var coords = firstGeoObject.geometry.getCoordinates();
+                                saveParsedData(entry.id, firstGeoObject.properties.getAll().metaDataProperty, coords, checkProcessed, entry.address);
+                            } 
+                        })
+                        .catch(err => {
+                            console.log(err);
+                            checkProcessed(false);
+                        })
+                }, 200)
+            }
+        }
+
+        function saveParsedData(id, geoProps, coords, checkProcessed, address) {
+            body = makeBody(id, geoProps, coords, address);
+
+            // fetch post json body to localost:8080
+            fetch('http://localhost:8080', {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(body)
+            })
+                .then(() => checkProcessed(true))
+                .catch(() => checkProcessed(false));
+                
+        }
+
+        function makeBody(id, geoProps, coords, address) {
+            console.log("Making addres for ", address)
+            var furtherPath = geoProps.GeocoderMetaData.AddressDetails.Country.AdministrativeArea;
+            var administrativeAreaName = furtherPath.AdministrativeAreaName;
+            
+            var subAdministrativeAreaName = ""
+            if (furtherPath.SubAdministrativeArea) {
+                subAdministrativeAreaName = furtherPath.SubAdministrativeArea.SubAdministrativeAreaName;
+                furtherPath = furtherPath.SubAdministrativeArea;
+            }
+
+            var city = "";
+            if (furtherPath.Locality) {
+                city = furtherPath.Locality.LocalityName;
+                furtherPath = furtherPath.Locality;
+            } else {
+                var areaKinds = geoProps.GeocoderMetaData.Address.Components.filter(a => a.kind === "area");
+                if (areaKinds.length > 0) {
+                    city = areaKinds[areaKinds.length-1].name;
+                    console.log("Area city - ", city);
+                } else {
+                    console.warn("no Locality and area in geoParams");
+                }
+            }
+            
+            var dependentLocality = "";
+            if (furtherPath.DependentLocality) {
+                dependentLocality = furtherPath.DependentLocality.DependentLocalityName;
+                furtherPath = furtherPath.DependentLocality;
+            } 
+            var street = "";
+            if (furtherPath.Thoroughfare) {
+                street = furtherPath.Thoroughfare.ThoroughfareName;
+                furtherPath = furtherPath.Thoroughfare;
+            } 
+            var house = "";
+            if (furtherPath.Premise) {
+                house = furtherPath.Premise.PremiseNumber;
+                furtherPath = furtherPath.Premise;
+            }
+            var postalCode = "";
+            if (furtherPath.PostalCode) {
+                postalCode = furtherPath.PostalCode.PostalCodeNumber;
+            }
+
+            var body = {
+                id: id,
+                latitude: String(coords[0]),
+                longitude: String(coords[1]),
+                city: city,
+                administrativeAreaName: administrativeAreaName,
+                subAdministrativeAreaName: subAdministrativeAreaName,
+                dependentLocality: dependentLocality,
+                street: street,
+                house: house,
+                postalCode: postalCode,
+            };
+
+            return body;
+        }
+    </script>
+</body>
+</html>
