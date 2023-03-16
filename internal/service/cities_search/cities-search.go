@@ -1,7 +1,7 @@
 package cities
 
 import (
-	cities_core "homeho-admin-backend/internal/core/cities"
+	cities_core "lbr-admin-backend/internal/core/cities"
 )
 
 type CitiesFether interface {

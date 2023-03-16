@@ -1,7 +1,7 @@
 package cities
 
 import (
-	storage_cities "homeho-backend/internal/storage/cities"
+	storage_cities "lbr-backend/internal/storage/cities"
 )
 
 type CitiesController struct {

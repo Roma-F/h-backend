@@ -1,11 +1,11 @@
 package main
 
 import (
-	"homeho-backend/internal/database"
-	search_ads "homeho-backend/internal/service/ads_search"
-	store_ads "homeho-backend/internal/storage/ads"
-	store_cities "homeho-backend/internal/storage/cities"
-	"homeho-backend/internal/transport/rest"
+	"lbr-backend/internal/database"
+	search_ads "lbr-backend/internal/service/ads_search"
+	store_ads "lbr-backend/internal/storage/ads"
+	store_cities "lbr-backend/internal/storage/cities"
+	"lbr-backend/internal/transport/rest"
 	"os"
 
 	"github.com/doug-martin/goqu/v9"

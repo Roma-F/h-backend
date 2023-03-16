@@ -3,8 +3,8 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"homeho-backend/internal/database"
 	"io"
+	"lbr-backend/internal/database"
 	"log"
 	"net/http"
 

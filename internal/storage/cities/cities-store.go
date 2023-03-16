@@ -4,9 +4,9 @@ import (
 	_ "embed"
 	"errors"
 	"fmt"
-	core_cities "homeho-backend/internal/core/cities"
-	"homeho-backend/internal/storage"
-	"homeho-backend/pkg/dotdb"
+	core_cities "lbr-backend/internal/core/cities"
+	"lbr-backend/internal/storage"
+	"lbr-backend/pkg/dotdb"
 	"strings"
 
 	"github.com/doug-martin/goqu/v9"

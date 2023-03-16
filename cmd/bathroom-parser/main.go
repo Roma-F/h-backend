@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
-	"homeho-backend/internal/database"
+	"lbr-backend/internal/database"
 	"strconv"
 	"strings"
 

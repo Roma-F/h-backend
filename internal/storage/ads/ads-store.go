@@ -5,9 +5,9 @@ import (
 	_ "embed"
 	"errors"
 	"fmt"
-	core_ads "homeho-backend/internal/core/ads"
-	"homeho-backend/internal/storage"
-	"homeho-backend/pkg/dotdb"
+	core_ads "lbr-backend/internal/core/ads"
+	"lbr-backend/internal/storage"
+	"lbr-backend/pkg/dotdb"
 
 	"github.com/doug-martin/goqu/v9"
 	"github.com/jmoiron/sqlx"

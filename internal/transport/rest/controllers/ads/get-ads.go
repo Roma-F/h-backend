@@ -3,8 +3,8 @@ package ads
 import (
 	"encoding/json"
 	"fmt"
-	core_ads "homeho-backend/internal/core/ads"
-	store_ads "homeho-backend/internal/storage/ads"
+	core_ads "lbr-backend/internal/core/ads"
+	store_ads "lbr-backend/internal/storage/ads"
 	"net/http"
 	"net/url"
 	"strconv"

@@ -2,7 +2,7 @@ package ads
 
 import (
 	"fmt"
-	core_ads "homeho-backend/internal/core/ads"
+	core_ads "lbr-backend/internal/core/ads"
 	"math"
 
 	"github.com/doug-martin/goqu/v9"

@@ -1,12 +1,12 @@
 package rest
 
 import (
-	search_ads "homeho-backend/internal/service/ads_search"
-	store_ads "homeho-backend/internal/storage/ads"
-	store_cities "homeho-backend/internal/storage/cities"
-	controller_ads "homeho-backend/internal/transport/rest/controllers/ads"
-	controller_cities "homeho-backend/internal/transport/rest/controllers/cities"
-	"homeho-backend/internal/transport/rest/middleware"
+	search_ads "lbr-backend/internal/service/ads_search"
+	store_ads "lbr-backend/internal/storage/ads"
+	store_cities "lbr-backend/internal/storage/cities"
+	controller_ads "lbr-backend/internal/transport/rest/controllers/ads"
+	controller_cities "lbr-backend/internal/transport/rest/controllers/cities"
+	"lbr-backend/internal/transport/rest/middleware"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"

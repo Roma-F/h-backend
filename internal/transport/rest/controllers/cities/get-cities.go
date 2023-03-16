@@ -2,7 +2,7 @@ package cities
 
 import (
 	"encoding/json"
-	cities "homeho-backend/internal/core/cities"
+	cities "lbr-backend/internal/core/cities"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"

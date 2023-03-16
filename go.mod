@@ -1,4 +1,4 @@
-module homeho-backend
+module lbr-backend
 
 go 1.18
 

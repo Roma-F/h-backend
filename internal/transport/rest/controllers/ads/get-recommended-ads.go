@@ -2,7 +2,7 @@ package ads
 
 import (
 	"encoding/json"
-	core_ads "homeho-backend/internal/core/ads"
+	core_ads "lbr-backend/internal/core/ads"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"

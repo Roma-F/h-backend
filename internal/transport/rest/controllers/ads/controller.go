@@ -1,8 +1,8 @@
 package ads
 
 import (
-	search_ads "homeho-backend/internal/service/ads_search"
-	storage_ads "homeho-backend/internal/storage/ads"
+	search_ads "lbr-backend/internal/service/ads_search"
+	storage_ads "lbr-backend/internal/storage/ads"
 )
 
 type AdsController struct {
